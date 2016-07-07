@@ -1,0 +1,22 @@
+{
+  "name": "cli-code-formatter",
+  "version": "1.0.0",
+  "description": "format code",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/synle/cli-code-formatter"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/synle/cli-code-formatter/issues"
+  },
+  "homepage": "https://github.com/synle/cli-code-formatter",
+  "dependencies": {
+    "js-beautify": "~1.6.3"
+  }
+}
