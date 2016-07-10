@@ -11,11 +11,13 @@ This project contains 2 tools:
 
 ## To Install
 ```
-#to hook up the code-formatter
-sudo ln -s /Users/sle/git/cli-code-formatter/index.js /usr/local/bin/code-formatter
+	npm install
 
-#to hook up the differ
-sudo ln -s /Users/sle/git/cli-code-formatter/code-differ.js /usr/local/bin/code-differ
+	#to hook up the code-formatter
+	sudo ln -s /Users/sle/git/cli-code-formatter/index.js /usr/local/bin/code-formatter
+
+	#to hook up the differ
+	sudo ln -s /Users/sle/git/cli-code-formatter/code-differ.js /usr/local/bin/code-differ
 ```
 
 
