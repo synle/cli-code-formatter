@@ -39,12 +39,21 @@ This project contains 2 tools:
 
 
 	#Then to Compare Files
+		#option 1: diff 2 files
 		code-differ '/file1' '/file2'
-			#output
-			#outFileName1:  /tmp/code-differ-1468169537387.left
-			#outFileName2:  /tmp/code-differ-1468169537387.right
+	
 
 
+		#option 2: diff commit hash with previous for changes
+			#short sha1 form (7 chars)
+			code-differ 825aa7a 'path to file'
+
+			#long sha1 form (40 chars)
+			code-differ 825aa7a17246433adf54063872a4604d27548319 'path to file'
+
+
+
+		#tools to use for differ
 		#opendiff (built in with MacOS)
 		code-differ '/file1' '/file2' 'opendiff $file1 $file2'
 

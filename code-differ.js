@@ -38,25 +38,28 @@ new Promise(function(fulfill, reject) {
         //format the path for filename
         fileName = fileName;
 
-        //need to retry as commit hash
-        var gitCatFileCmd1 = 'git cat-file blob ' + commitHash + ':./' + fileName;
-        var gitCatFileCmd2 = 'git cat-file blob ' + commitHash + '^:./' + fileName;
+        //sha to compare
+        var sha1 = commitHash;
+        var sha2 = commitHash + '^'
 
-        console.log(gitCatFileCmd1);
-        console.log(gitCatFileCmd2);
+        //need to retry as commit hash
+        var gitCatFileCmd1 = 'git cat-file blob ' + sha1 + ':./' + fileName;
+        var gitCatFileCmd2 = 'git cat-file blob ' + sha2 + '^:./' + fileName;
 
         exec(gitCatFileCmd1, function(err1, formattedContent1) {
             exec(gitCatFileCmd2, function(err2, formattedContent2) {
-                console.log(gitCatFileCmd1, formattedContent1.length)
-                console.log(gitCatFileCmd2, formattedContent2.length)
                 fulfill([formattedContent1, formattedContent2]);
             })
         })
     }
 })
     .then(function(formattedContents) {
-        var formattedContent1 = formattedContents[0]
-        var formattedContent2 = formattedContents[1]
+        var formattedContent1 = formattedContents[0] || '';
+        var formattedContent2 = formattedContents[1] || '';
+
+        if (formattedContent1.length === 0 && formattedContent2.length === 0) {
+            return console.log('Nothing to compare, both side are empty string');
+        }
 
         //these are mainly for output name stored in /tmp/...
         var outFileName1 = fileNamePrefix + '.left';
