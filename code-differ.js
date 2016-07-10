@@ -79,4 +79,7 @@ new Promise(function(fulfill, reject) {
 
         //execute the differ command
         exec(diffToolCmd);
+
+        //exit no matter what
+        setTimeout(process.exit, 1000);
     });
