@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/synle/cli-code-formatter",
   "dependencies": {
-    "js-beautify": "~1.6.3"
+    "js-beautify": "~1.6.3",
+    "promise": "~7.1.1"
   }
 }
