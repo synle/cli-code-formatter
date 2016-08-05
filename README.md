@@ -14,13 +14,17 @@ This project contains 2 tools:
 	npm install
 
 	#to hook up the code-formatter
-	sudo ln -s /Users/sle/git/cli-code-formatter/index.js /usr/local/bin/code-formatter
+	sudo ln -s ./index.js /usr/local/bin/code-formatter
 
 	#to hook up the differ
-	sudo ln -s /Users/sle/git/cli-code-formatter/code-differ.js /usr/local/bin/code-differ
+	sudo ln -s ./code-differ.js /usr/local/bin/code-differ
 ```
 
-
+##link your diff
+```
+	#diffmerge on mac
+	ln -s /Applications/DiffMerge.app/Contents/Resources/diffmerge.sh /usr/local/bin/diffmerge
+```
 
 
 ## To Use
@@ -40,25 +44,20 @@ This project contains 2 tools:
 
 	#Then to Compare Files
 		#option 1: diff 2 files
-		code-differ '/file1' '/file2'
-	
+		code-differ -f '/file1' '/file2'
+
 
 
 		#option 2: diff commit hash with previous for changes
-			#short sha1 form (7 chars)
-			code-differ 825aa7a 'path to file'
-
-			#long sha1 form (40 chars)
-			code-differ 825aa7a17246433adf54063872a4604d27548319 'path to file'
+			code-differ -s '/file1' '825aa7a'
 
 
-
-		#tools to use for differ
+		#tools to use for differ: append the following to your command
 		#opendiff (built in with MacOS)
-		code-differ '/file1' '/file2' 'opendiff $file1 $file2'
+		... 'opendiff $file1 $file2'
 
-		#kdiff3 
-		code-differ '/file1' '/file2' 'kdiff3 $file1 $file2'
+		#kdiff3
+		... 'kdiff3 $file1 $file2'
 
 		#or your custom differ, please note that this tool will not work with vimdiff
 ```

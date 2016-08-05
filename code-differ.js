@@ -1,47 +1,62 @@
 #!/usr/bin/env node
- //please note that this only supports file, no content can be put here
 
+//please note that this only supports file, no content can be put here
 var fs = require('fs');
 var Promise = require('promise');
 var exec = require('child_process').exec;
 var formatter = require('./formatter');
 
+var isFileMode = true;
+var validArguments = process.argv.filter( function(arg, idx){
+    switch(arg.toLowerCase()){
+        case '-s':
+        case '--s':
+        case '-sha':
+        case '--sha':
+        case '-g':
+        case '--git':
+            isFileMode = false;
+            break;
+        default:
+            if(arg.indexOf('$file1 $file2') > 0){
+                //diff mode is passed, use it
+                diff
+            }
+            break;
+    }
 
+    return idx >= 2 && arg.indexOf('--') !== 0
+});
 
+if(validArguments.length === 0){
+    return console.log('file or sha is needed for code formatter');
+}
 
-var timeStamp = Date.now();
-var fileNamePrefix = '/tmp/code-differ-' + timeStamp
+//code-differ -f /tmp/test1 /tmp/test2
+if(isFileMode){
+    inFileName1 = validArguments[0];
+    inFileName2 = validArguments[1];
 
-var argLenth = process.argv.length;
+    if(!inFileName1 || !inFileName2){
+        return console.log('file mode requires both inFileName1 and inFileName2');
+    }
+} else {
+    //2 sha or 1 sha
+    //code-differ -s /tmp/test sha
+    if(validArguments[0].indexOf('/') >= 0){
+        //on a file with a sha : compare sha and sha^
+        fileName = validArguments[0];
+        sha1 = validArguments[1];
+        sha2 = validArguments[2] || sha1 + '^';
+    }
 
-//if inputs are file
-var inFileName1 = process.argv[2];
-var inFileName2 = process.argv[3];
-
-
-//if input are commit hash
-var commitHash = process.argv[2];
-var fileName = process.argv[3];
-var sha1 = commitHash;
-var sha2 = commitHash + '^'
-
-var isFileMode = commitHash.length !== 7 && commitHash.length !== 40; //sha hash is either 7 or 40 (long or short)
-if (argLenth >= 5) {
-    //when compare 2 hashes
-    sha2 = process.argv[3];
-    fileName = process.argv[4];
-    isFileMode = false;
+    if(!sha1 || !sha2){
+        return console.log('file mode requires both sha1 and sha2');
+    }
 }
 
 //get difftool
-var differTool;
-for (var i = 0; i < argLenth; i++) {
-    if (process.argv[i].indexOf('$file1') >= 0 && process.argv[i].indexOf('$file2') >= 0) {
-        differTool = process.argv[i]; //set it
-    }
-}
-differTool = differTool || 'opendiff $file1 $file2'; //fall back to vimdiff
-
+var differTool = differTool || 'vimdiff $file1 $file2'; //fall back to vimdiff
 
 //this will work with file path
 new Promise(function(fulfill, reject) {
@@ -85,6 +100,11 @@ new Promise(function(fulfill, reject) {
         if (formattedContent1.length === 0 && formattedContent2.length === 0) {
             return console.log('Nothing to compare, both side are empty string');
         }
+
+        //generate the random file prefix
+        //for the diff
+        var timeStamp = Date.now();
+        var fileNamePrefix = '/tmp/code-differ-' + timeStamp;
 
         //these are mainly for output name stored in /tmp/...
         var outFileName1 = fileNamePrefix + '.left';
